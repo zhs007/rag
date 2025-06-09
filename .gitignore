@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+venv/
+.venv/
+env/
+.env/
+site-packages/
+
+# Logs
+*.log
+
+# Databases
+*.sqlite3
+*.db
+rag-service/chroma_db/
+
+# Configuration
+.env
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# LlamaIndex specific
+.llama_index/
+llama_index_cache/
+
+# Data directory (optional, uncomment if you don't want to track data files)
+# rag-service/app/data/
