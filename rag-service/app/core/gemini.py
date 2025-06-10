@@ -4,7 +4,7 @@ from ..config import settings
 class GeminiModel:
     def __init__(self):
         genai.configure(api_key=settings.gemini_api_key)
-        self.model = genai.GenerativeModel('gemini-2.5-flash-preview-05-20')
+        self.model = genai.GenerativeModel(settings.gemini_model)
         
     def generate(self, prompt: str, **kwargs) -> str:
         """Generate text response from Gemini model"""
