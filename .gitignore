@@ -35,4 +35,4 @@ Thumbs.db
 llama_index_cache/
 
 # Data directory (optional, uncomment if you don't want to track data files)
-# rag-service/app/data/
+rag-service/app/data/

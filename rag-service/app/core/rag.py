@@ -1,7 +1,5 @@
 from llama_index.core import VectorStoreIndex, Settings
 from llama_index.vector_stores.chroma import ChromaVectorStore
-from llama_index.llms.gemini import Gemini
-from llama_index.embeddings.gemini import GeminiEmbedding
 from llama_index.readers.file import PandasCSVReader
 from llama_index.core.readers import SimpleDirectoryReader # Corrected import path
 from .chroma import chroma_manager
@@ -9,16 +7,21 @@ from pathlib import Path
 from ..config import settings
 import os
 
-os.environ["GOOGLE_API_KEY"] = settings.gemini_api_key
-
-Settings.llm = Gemini(model="gemini-2.5-flash-preview-05-20")
-Settings.embed_model = GeminiEmbedding(model_name="models/embedding-001")
-
 class RAGSystem:
     def __init__(self):
         self.vector_store = ChromaVectorStore(chroma_collection=chroma_manager.collection)
-        
+
+    def _ensure_llm(self):
+        from llama_index.llms.gemini import Gemini
+        from llama_index.embeddings.gemini import GeminiEmbedding
+        from llama_index.core import Settings
+        import os
+        os.environ["GOOGLE_API_KEY"] = settings.gemini_api_key
+        Settings.llm = Gemini(model=settings.gemini_model)
+        Settings.embed_model = GeminiEmbedding(model_name="models/embedding-001")
+
     def ingest_documents(self):
+        self._ensure_llm()
         """Load and index documents from data directory"""
         file_extractor = {
             ".csv": PandasCSVReader()
@@ -46,6 +49,7 @@ class RAGSystem:
         return index
 
     def get_retriever(self):
+        self._ensure_llm()
         """Create and then return a retriever from existing index"""
         index = VectorStoreIndex.from_vector_store(self.vector_store)
         return index.as_retriever()
